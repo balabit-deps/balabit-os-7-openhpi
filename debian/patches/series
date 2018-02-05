@@ -1,0 +1,4 @@
+makefile_fix.patch
+ipmi_direct_gcc_fix.patch
+snmpflags-fix.patch
+no-md2.patch

@@ -1,0 +1,20 @@
+Description: Fix FTBFS when caused by truncated -fdebug-prefix-map
+ Due to bad luck regarding the random part of the build directory
+ on the Debian buildds, "net-snmp-config --cflags" on amd64
+ currently contains
+    -O2 -fdebug-prefix-map=/build/net-snmp-OeyA43/net-snmp-5.7.3+dfsg=.
+ .
+ Fix the SNMPFLAGS regex to not truncate -fdebug-prefix-map
+Author: Adrian Bunk <bunk@debian.org>
+
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -160,7 +160,7 @@
+     ],
+     [
+         have_netsnmp=yes
+-        SNMPFLAGS=`${net_snmp_config:-net-snmp-config} --cflags | perl -p -e 's/-O\S*//g'`
++        SNMPFLAGS=`${net_snmp_config:-net-snmp-config} --cflags | perl -p -e 's/ -O\S*//g'`
+         SNMPLIBS=`${net_snmp_config:-net-snmp-config} --libs`
+         AC_MSG_RESULT(yes)
+     ],

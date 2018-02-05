@@ -1,0 +1,32 @@
+Fixed ftbfs with GCC-7 (Closes: #853590)
+--- a/plugins/ipmidirect/ipmi_mc_vendor.cpp
++++ b/plugins/ipmidirect/ipmi_mc_vendor.cpp
+@@ -322,7 +322,7 @@
+       if ( addr.m_channel != source_mc->GetChannel() ) 
+           stdlog << "WARNING : SDR channel " << addr.m_channel << " NOT equal to MC channel " << source_mc->GetChannel() << "\n";
+ 
+-       if ( FindOrCreateResource( domain, source_mc, fru_id, sdr, sdrs ) == false ) {
++       if ( FindOrCreateResource( domain, source_mc, fru_id, sdr, sdrs ) == NULL ) {
+ 	    return false;
+ 	}
+      }
+--- a/plugins/ipmidirect/ipmi_resource.cpp
++++ b/plugins/ipmidirect/ipmi_resource.cpp
+@@ -73,7 +73,7 @@
+ 
+   domain->ReadLock();
+ 
+-  if ( domain->VerifyResource( resource ) == false )
++  if ( domain->VerifyResource( resource ) == NULL )
+        return SA_ERR_HPI_NOT_PRESENT;
+ 
+   return rv;
+@@ -91,7 +91,7 @@
+   
+   domain->ReadLock();
+   
+-  if ( domain->VerifyRdr( rdr ) == false )
++  if ( domain->VerifyRdr( rdr ) == NULL )
+        return SA_ERR_HPI_NOT_PRESENT;
+ 
+   return rv;
